@@ -1,0 +1,87 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "A user profile in the system.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "The unique ID of the user." },
+        "email": { "type": "string", "format": "email", "description": "The user's email address." },
+        "displayName": { "type": "string", "description": "The user's display name." },
+        "photoURL": { "type": "string", "description": "The user's photo URL." },
+        "role": { "type": "string", "enum": ["admin", "user"], "description": "The user's role." },
+        "apiKey": { "type": "string", "description": "The user's custom API key (optional)." }
+      },
+      "required": ["uid", "email", "displayName", "role"]
+    },
+    "Poster": {
+      "title": "Poster",
+      "description": "A generated M-Pesa poster configuration.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "The ID of the user who created the poster." },
+        "businessName": { "type": "string", "description": "The name of the business." },
+        "number": { "type": "string", "description": "The primary payment number." },
+        "storeNumber": { "type": "string", "description": "The store or account number (optional)." },
+        "paymentType": { "type": "string", "enum": ["till", "paybill", "send_money", "pochi", "agent"], "description": "The type of payment." },
+        "template": { "type": "string", "description": "The template ID." },
+        "accentColor": { "type": "string", "description": "The accent color hex code." },
+        "logoUrl": { "type": "string", "description": "URL of the business logo." },
+        "size": { "type": "string", "enum": ["A4_Landscape", "A4_Portrait", "A5", "Square", "A3_Landscape", "A3_Portrait", "A6_Sticker", "HD_Display"], "description": "The poster size." },
+        "theme": { "type": "string", "enum": ["default", "cafe", "church", "school", "retail", "salon", "cyber", "hotel", "pharmacy"], "description": "The business theme." },
+        "customFooter": { "type": "string", "description": "Custom footer text." },
+        "headerSubtitle": { "type": "string", "description": "Custom header subtitle." },
+        "contactInfo": { "type": "string", "description": "Optional business phone or location line." },
+        "fontStyle": { "type": "string", "enum": ["modern", "impact", "classic", "condensed", "mono"], "description": "Poster typography style." },
+        "borderStyle": { "type": "string", "enum": ["none", "clean", "double", "accent_top"], "description": "Poster border frame style." },
+        "numberBoxStyle": { "type": "string", "enum": ["clean", "boxed", "filled"], "description": "Payment number display style." },
+        "watermarkStyle": { "type": "string", "enum": ["tiled", "centered", "corner"], "description": "M-Pesa watermark layout style." },
+        "watermarkOpacity": { "type": "number", "description": "M-Pesa watermark opacity between 0.04 and 0.16." },
+        "showQrCode": { "type": "boolean", "description": "Whether to render a QR code on the poster." },
+        "qrMode": { "type": "string", "enum": ["standard", "daraja"], "description": "QR generation mode (client standard or Safaricom Daraja QR API)." },
+        "qrAmount": { "type": "number", "description": "Optional fixed amount in KES for Daraja Dynamic QR." },
+        "qrRefNo": { "type": "string", "description": "Optional reference number for Daraja Dynamic QR." },
+        "mpesaQrImage": { "type": "string", "description": "Base64 PNG data URL returned by Safaricom Daraja QR API." },
+        "qrCodeContent": { "type": "string", "description": "Custom QR code payload text or URL." },
+        "showInstructions": { "type": "boolean", "description": "Whether to show the How to Pay instructions." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "The creation timestamp." }
+      },
+      "required": ["userId", "businessName", "number", "paymentType", "template", "accentColor", "size", "theme", "createdAt"]
+    },
+    "Post": {
+      "title": "Post",
+      "description": "A blog post.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "description": "The post title." },
+        "slug": { "type": "string", "description": "The URL-friendly slug." },
+        "content": { "type": "string", "description": "The markdown content." },
+        "excerpt": { "type": "string", "description": "A short summary." },
+        "authorId": { "type": "string", "description": "The ID of the author." },
+        "authorName": { "type": "string", "description": "The name of the author." },
+        "coverImage": { "type": "string", "description": "URL of the cover image." },
+        "tags": { "type": "array", "items": { "type": "string" }, "description": "List of tags." },
+        "status": { "type": "string", "enum": ["draft", "published"], "description": "The post status." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Creation timestamp." },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Last update timestamp." },
+        "metaTitle": { "type": "string", "description": "SEO title." },
+        "metaDescription": { "type": "string", "description": "SEO description." }
+      },
+      "required": ["title", "slug", "content", "authorId", "authorName", "status", "createdAt", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profiles."
+    },
+    "/posters/{posterId}": {
+      "schema": "Poster",
+      "description": "User-generated posters."
+    },
+    "/posts/{postId}": {
+      "schema": "Post",
+      "description": "Blog posts."
+    }
+  }
+}
